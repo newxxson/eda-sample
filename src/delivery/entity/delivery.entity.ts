@@ -1,0 +1,53 @@
+import { Order } from 'src/order/entity/order.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+
+export enum DeliveryStatus {
+  CANCELED = 'CANCELED',
+  DELIVERING = 'DELIVERING',
+  DELIVERED = 'DELIVERED',
+}
+
+@Entity()
+export class Delivery {
+  @PrimaryGeneratedColumn('uuid')
+  identifier: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  created_at: Date;
+
+  @Column()
+  modified_at: Date;
+
+  @Column({ nullable: true })
+  delivered_at: Date | null;
+
+  @Column()
+  status: string;
+
+  @OneToOne(() => Order, { nullable: false, eager: false })
+  @JoinColumn({ name: 'order_identifier' })
+  orderIdentifier: string;
+}
+
+export class DeliveryFactory {
+  static create(address: string, orderIdentifier: string): Delivery {
+    const delivery = new Delivery();
+    delivery.address = address;
+    delivery.orderIdentifier = orderIdentifier;
+    delivery.created_at = new Date();
+    delivery.modified_at = new Date();
+    delivery.status = DeliveryStatus.DELIVERING;
+    return delivery;
+  }
+}
