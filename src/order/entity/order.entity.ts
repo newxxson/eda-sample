@@ -29,9 +29,12 @@ export class Order {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Product, { nullable: false, eager: false })
-  @JoinColumn({ name: 'product_identifier' })
+  @Column({ name: 'product_identifier' })
   productIdentifier: string;
+
+  @ManyToOne(() => Product, { nullable: false, eager: true })
+  @JoinColumn({ name: 'product_identifier' })
+  product: Product;
 
   @Column()
   created_at: Date;
