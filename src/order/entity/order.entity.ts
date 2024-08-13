@@ -8,6 +8,7 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { CreateOrderDto } from '../dto/create_order.dto';
 
 export enum OrderStatus {
   CANCELED = -1,
@@ -29,9 +30,9 @@ export class Order {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Product, { nullable: false, eager: false })
+  @ManyToOne(() => Product, { nullable: false, eager: true })
   @JoinColumn({ name: 'product_identifier' })
-  productIdentifier: string;
+  product: string;
 
   @Column()
   created_at: Date;
@@ -41,12 +42,12 @@ export class Order {
 }
 
 export class OrderFactory {
-  static create(product: Product, quantity: number): Order {
+  static create(createOrderDto: CreateOrderDto): Order {
     const order = new Order();
-    order.productIdentifier = product.identifier;
-    order.name = product.name;
-    order.price = product.price;
-    order.quantity = quantity;
+    order.product = createOrderDto.productId;
+    order.name = createOrderDto.name;
+    order.price = createOrderDto.price * createOrderDto.quantity;
+    order.quantity = createOrderDto.quantity;
     order.created_at = new Date();
     order.status = OrderStatus.APPROVED;
     return order;

@@ -8,6 +8,7 @@ import { Delivery } from './delivery/entity/delivery.entity';
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
 import { DeliveryModule } from './delivery/delivery.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -16,7 +17,9 @@ import { DeliveryModule } from './delivery/delivery.module';
       database: 'db.sqlite', // This will create a file named 'test.sqlite' in your project root
       entities: [Order, Product, Delivery],
       synchronize: true,
+      logging: ['query', 'error'], // Enable query and error logging
     }),
+    EventEmitterModule.forRoot(),
     OrderModule,
     ProductModule,
     DeliveryModule,

@@ -1,8 +1,17 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Delivery, DeliveryStatus } from './entity/delivery.entity';
+import {
+  Delivery,
+  DeliveryFactory,
+  DeliveryStatus,
+} from './entity/delivery.entity';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UpdateDeliveryDto } from './dto/update_delivery.dto';
+import {
+  OrderCreatedEvent,
+  OrderEventDto,
+  OrderUpdatedEvent,
+} from 'src/order/dto/order_event.dto';
 
 @Injectable()
 export class DeliveryService {
@@ -12,7 +21,9 @@ export class DeliveryService {
   ) {}
 
   async findAll(): Promise<Delivery[]> {
-    return await this.deliveryRepository.find();
+    const deliveries = await this.deliveryRepository.find();
+    console.log(deliveries.map((delivery) => delivery.order));
+    return deliveries;
   }
 
   async update(updateDeliveryDto: UpdateDeliveryDto): Promise<Delivery> {
@@ -27,5 +38,30 @@ export class DeliveryService {
     }
 
     return await this.deliveryRepository.save(delivery);
+  }
+
+  async createDelivery(orderEventDto: OrderCreatedEvent): Promise<void> {
+    const delivery = DeliveryFactory.create(
+      orderEventDto.address,
+      orderEventDto.orderId,
+    );
+
+    await this.deliveryRepository.save(delivery);
+
+    console.log('Delivery created', delivery);
+  }
+
+  async cancelDelivery(orderEventDto: OrderUpdatedEvent): Promise<void> {
+    console.log('Canceling delivery', orderEventDto);
+
+    const delivery = await this.deliveryRepository.findOne({
+      where: { orderIdentifier: orderEventDto.orderId },
+    });
+
+    delivery.status = DeliveryStatus.CANCELED;
+
+    await this.deliveryRepository.save(delivery);
+
+    console.log('Delivery canceled', delivery);
   }
 }

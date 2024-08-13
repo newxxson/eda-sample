@@ -1,5 +1,7 @@
 export class CreateOrderDto {
-  product_id: string;
+  productId: string;
+  name: string;
+  price: number;
   quantity: number;
   address: string;
 }
