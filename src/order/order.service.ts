@@ -1,10 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order, OrderFactory } from './entity/order.entity';
+import { Order, OrderFactory, OrderStatus } from './entity/order.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create_order.dto';
 import { Product } from 'src/product/entity/product.entity';
-import { Delivery, DeliveryFactory } from 'src/delivery/entity/delivery.entity';
+import {
+  Delivery,
+  DeliveryFactory,
+  DeliveryStatus,
+} from 'src/delivery/entity/delivery.entity';
 import { UpdateOrderDto } from './dto/update_order.dto';
 
 @Injectable()
@@ -42,6 +46,14 @@ export class OrderService {
     });
 
     order.status = updateOrderDto.status;
+
+    if (updateOrderDto.status == OrderStatus.CANCELED) {
+      const delivery = await this.deliveryRepository.findOne({
+        where: { orderIdentifier: updateOrderDto.order_id },
+      });
+      delivery.status = DeliveryStatus.CANCELED;
+      await this.deliveryRepository.save(delivery);
+    }
 
     return await this.orderRepository.save(order);
   }
