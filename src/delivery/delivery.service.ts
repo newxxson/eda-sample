@@ -42,7 +42,7 @@ export class DeliveryService {
     const updatedDelivery = await this.deliveryRepository.save(delivery);
 
     if (updatedDelivery.status === DeliveryStatus.DELIVERED) {
-      console.log('Emitting dev event');
+      console.log('Emitting devlivery delivered event');
       await this.eventEmitter.emitAsync('delivery.delivered', {
         orderId: delivery.orderIdentifier,
       });
