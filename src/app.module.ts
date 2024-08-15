@@ -14,11 +14,11 @@ import { DeliveryModule } from './delivery/delivery.module';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite', // This will create a file named 'test.sqlite' in your project root
-      entities: [Order, Product, Delivery],
+      entities: [Delivery],
       synchronize: true,
     }),
-    OrderModule,
-    ProductModule,
+    // OrderModule,
+    // ProductModule,
     DeliveryModule,
   ],
   controllers: [AppController],

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create_order.dto';
 import { UpdateOrderDto } from './dto/update_order.dto';
@@ -19,9 +27,12 @@ export class OrderController {
     return await this.orderService.findAll();
   }
 
-  @Put('')
+  @Put('/:orderId')
   @HttpCode(200)
-  async updateOrder(@Body() updateOrderDto: UpdateOrderDto) {
-    return await this.orderService.update(updateOrderDto);
+  async updateOrder(
+    @Param('orderId') orderId: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    return await this.orderService.update(orderId, updateOrderDto);
   }
 }

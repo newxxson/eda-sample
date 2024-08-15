@@ -37,11 +37,6 @@ export class Delivery {
 
   @Column({ name: 'order_identifier' })
   orderIdentifier: string;
-
-  // Keep the relationship with the Order entity
-  @OneToOne(() => Order, { nullable: false, eager: true })
-  @JoinColumn({ name: 'order_identifier' })
-  order: Order;
 }
 
 export class DeliveryFactory {
