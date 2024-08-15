@@ -2,11 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Order } from './order/entity/order.entity';
-import { Product } from './product/entity/product.entity';
 import { Delivery } from './delivery/entity/delivery.entity';
-import { OrderModule } from './order/order.module';
-import { ProductModule } from './product/product.module';
 import { DeliveryModule } from './delivery/delivery.module';
 
 @Module({
@@ -17,8 +13,6 @@ import { DeliveryModule } from './delivery/delivery.module';
       entities: [Delivery],
       synchronize: true,
     }),
-    // OrderModule,
-    // ProductModule,
     DeliveryModule,
   ],
   controllers: [AppController],
