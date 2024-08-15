@@ -43,10 +43,9 @@ export class DeliveryService {
 
     if (updateDeliveryDto.status === DeliveryStatus.DELIVERED) {
       try {
-        await axios.post('http://localhost:3000', {
-          orderId: delivery.orderIdentifier,
-          status: updateDeliveryDto.status,
-        });
+        await axios.put(
+          `http://localhost:3000/order/${delivery.orderIdentifier}/delivered`,
+        );
       } catch (error) {
         console.error('Error making POST request', error);
       }
