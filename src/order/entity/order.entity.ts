@@ -1,13 +1,5 @@
-import { Product } from 'src/product/entity/product.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-  PrimaryColumn,
-} from 'typeorm';
-import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductDto } from '../dto/product.dto';
 
 export enum OrderStatus {
   CANCELED = -1,
@@ -32,10 +24,6 @@ export class Order {
   @Column({ name: 'product_identifier' })
   productIdentifier: string;
 
-  @ManyToOne(() => Product, { nullable: false, eager: true })
-  @JoinColumn({ name: 'product_identifier' })
-  product: Product;
-
   @Column()
   created_at: Date;
 
@@ -44,7 +32,7 @@ export class Order {
 }
 
 export class OrderFactory {
-  static create(product: Product, quantity: number): Order {
+  static create(product: ProductDto, quantity: number): Order {
     const order = new Order();
     order.productIdentifier = product.identifier;
     order.name = product.name;
