@@ -40,16 +40,19 @@ export class OrderService {
     return [order, delivery];
   }
 
-  async update(updateOrderDto: UpdateOrderDto): Promise<Order> {
+  async update(
+    orderId: string,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: { identifier: updateOrderDto.order_id },
+      where: { identifier: orderId },
     });
 
     order.status = updateOrderDto.status;
 
     if (updateOrderDto.status == OrderStatus.CANCELED) {
       const delivery = await this.deliveryRepository.findOne({
-        where: { orderIdentifier: updateOrderDto.order_id },
+        where: { orderIdentifier: orderId },
       });
       delivery.status = DeliveryStatus.CANCELED;
       await this.deliveryRepository.save(delivery);
