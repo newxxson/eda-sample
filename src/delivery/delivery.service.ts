@@ -12,12 +12,14 @@ import {
   OrderEventDto,
   OrderUpdatedEvent,
 } from 'src/order/dto/order_event.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class DeliveryService {
   constructor(
     @InjectRepository(Delivery)
     private deliveryRepository: Repository<Delivery>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async findAll(): Promise<Delivery[]> {
@@ -37,7 +39,16 @@ export class DeliveryService {
       delivery.delivered_at = new Date();
     }
 
-    return await this.deliveryRepository.save(delivery);
+    const updatedDelivery = await this.deliveryRepository.save(delivery);
+
+    if (updatedDelivery.status === DeliveryStatus.DELIVERED) {
+      console.log('Emitting dev event');
+      await this.eventEmitter.emitAsync('delivery.delivered', {
+        orderId: delivery.orderIdentifier,
+      });
+    }
+
+    return updatedDelivery;
   }
 
   async createDelivery(orderEventDto: OrderCreatedEvent): Promise<void> {
