@@ -55,13 +55,13 @@ export class DeliveryService {
     return;
   }
 
-  async create(createDeliveryDto: CreateDeliveryDto): Promise<void> {
+  async create(createDeliveryDto: CreateDeliveryDto): Promise<Delivery> {
     const delivery = DeliveryFactory.create(
       createDeliveryDto.address,
       createDeliveryDto.orderIdentifier,
     );
 
-    await this.deliveryRepository.save(delivery);
+    return await this.deliveryRepository.save(delivery);
   }
 
   async cancel(orderId: string): Promise<void> {
