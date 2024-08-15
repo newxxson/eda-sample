@@ -1,12 +1,4 @@
-import { Order } from 'src/order/entity/order.entity';
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Product {
