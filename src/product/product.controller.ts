@@ -17,4 +17,10 @@ export class ProductController {
   async getProductById(productId: string) {
     return await this.productService.findById(productId);
   }
+
+  @Get('')
+  @HttpCode(200)
+  async getAllProducts() {
+    return await this.productService.findAll();
+  }
 }
