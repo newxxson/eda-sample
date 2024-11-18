@@ -11,7 +11,6 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create_order.dto';
 import { UpdateOrderDto } from './dto/update_order.dto';
 import { OnEvent } from '@nestjs/event-emitter';
-import { OrderStatus } from './entity/order.entity';
 
 @Controller('order')
 export class OrderController {
@@ -29,7 +28,7 @@ export class OrderController {
     return await this.orderService.findAll();
   }
 
-  @Put(':orderId')
+  @Put('/:orderId')
   @HttpCode(200)
   async updateOrder(
     @Param('orderId') orderId: string,
@@ -38,13 +37,8 @@ export class OrderController {
     return await this.orderService.update(orderId, updateOrderDto);
   }
 
-  @OnEvent('delivery.delivered')
-  async handleDeliveryDeliveredEvent(event: {
-    orderId: string;
-  }): Promise<void> {
-    await this.orderService.update(
-      event.orderId,
-      new UpdateOrderDto(OrderStatus.DELEVERED),
-    );
+  @OnEvent('payment.payment-created')
+  async completeOrder(body) {
+    await this.orderService.completeOrder(body.orderId);
   }
 }

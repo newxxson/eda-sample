@@ -56,4 +56,16 @@ export class OrderService {
     console.log('Order updated', updatedOrder);
     return updatedOrder;
   }
+
+  async completeOrder(orderId: string) {
+    const order = await this.orderRepository.findOne({
+      where: { identifier: orderId },
+    });
+
+    order.status = OrderStatus.APPROVED;
+
+    await this.orderRepository.save(order);
+
+    console.log('completed order');
+  }
 }
