@@ -28,7 +28,7 @@ export class OrderService {
     );
 
     const deliveryResponse = await axios.post(
-      'http://localhost:3002/delivery',
+      'http://localhost:3002/deliveries',
       {
         address: createOrderDto.address,
         orderIdentifier: order.identifier,
@@ -53,7 +53,7 @@ export class OrderService {
 
     if (updateOrderDto.status === OrderStatus.CANCELED) {
       await axios.put(
-        `http://localhost:3002/delivery/order/${order.identifier}/cancel`,
+        `http://localhost:3002/deliveries/order/${order.identifier}/cancel`,
       );
     }
 
