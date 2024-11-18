@@ -9,6 +9,7 @@ import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
 import { DeliveryModule } from './delivery/delivery.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     OrderModule,
     ProductModule,
     DeliveryModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

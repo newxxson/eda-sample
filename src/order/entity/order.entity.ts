@@ -12,6 +12,7 @@ import { CreateOrderDto } from '../dto/create_order.dto';
 
 export enum OrderStatus {
   CANCELED = -1,
+  PENDING = 0,
   APPROVED = 1,
   DELEVERED = 2,
 }
