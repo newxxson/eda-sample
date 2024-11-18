@@ -11,7 +11,7 @@ import { DeliveryService } from './delivery.service';
 import { UpdateDeliveryDto } from './dto/update_delivery.dto';
 import { CreateDeliveryDto } from './dto/create_delivery.dto';
 
-@Controller('delivery')
+@Controller('deliveries')
 export class DeliveryController {
   constructor(private deliveryService: DeliveryService) {}
 
